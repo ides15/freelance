@@ -1,0 +1,276 @@
+<!-- MAKE SURE THESE SCRIPTS, LINK AND STYLES ARE ABOVE THE HTML CODE BELOW -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style type="text/css">
+	.calorie-calculator {
+		border: 1px solid lightGrey;
+		height: 730px;
+		max-width: 600px;
+	}
+
+	.options-container {
+		margin-left: 50px;
+		margin-right: 50px;
+		margin-bottom: 20px;
+	}
+
+	.options {
+		margin-top: 10px;
+		display: inline;
+	}
+
+	.title {
+		width: 100%;
+		height: 70px;
+		margin-bottom: 20px;
+	}
+
+	h3 {
+		margin: 0px;
+		text-align: center;
+	}
+
+	.exercise-info {
+		padding: 7px;
+		padding-left: 10px;
+	}
+
+	.jumbotron {
+		padding: 20px;
+	}
+
+	@media only screen and (max-width: 479px) {
+		.calorie-calculator {
+			height: 1100px;
+		}
+	}
+</style>
+
+
+
+
+
+<!-- PUT THIS HTML IN YOUR WEBSITE'S HTML WHEREVER YOU WANT IT TO GO -->
+<div class="calorie-calculator">
+	<form class="calc-form">
+		<div class="jumbotron">
+			<h3><strong>Daily Calorie Calculator</strong></h3>
+		</div>
+		<div class="options-container">
+			<div class="form-group col-xs-12">
+				<label class="control-label">Age:</label>
+				<input type="number" class="form-control" id="years-text" name="years" placeholder="Years" min="1" max="120" required>
+			</div>
+			<div class="form-group col-xs-12">
+				<label class="control-label">Gender:</label>
+				<label class="radio-inline"><input type="radio" id="male-radio" name="gender" value="male" checked> Male</label>
+				<label class="radio-inline"><input type="radio" id="female-radio" name="gender" value="female"> Female</label>
+			</div>
+			<div class="form-group col-xs-12">
+				<label class="control-label">Weight:</label> 
+				<input type="number" class="form-control" id="weight-text" name="weight" min="1" max="1000" required>
+				<label class="radio-inline"><input type="radio" id="pounds-radio" name="weight" value="pounds" checked> Pounds</label>
+				<label class="radio-inline"><input type="radio" id="kilos-radio" name="weight" value="kilos"> Kilos</label>
+			</div>
+			<div class="form-group col-xs-12" id="height-div">
+				<label class="control-label">Height:</label> 
+				<label class="radio-inline"><input type="radio" id="feet-radio" name="height" value="male" checked> Feet + Inches</label>
+				<label class="radio-inline"><input type="radio" id="cms-radio" name="height" value="female"> CMs</label>
+			</div>
+			<div class="form-group col-xs-12" id="imp-text-div">
+				<label class="control-label">Feet:<input type="number" class="form-control" id="feet-text" name="height-input" min="0" max="10" required></label>
+				<label class="control-label">Inches:<input type="number" class="form-control" id="inches-text" name="height-input" min="0" max="11" required></label>
+			</div>
+			<div class="form-group col-xs-12" id="cms-text-div" style="display: none">
+				<label class="control-label">CMs:<input type="number" class="form-control" id="cms-text" name="height-input" min="1" max="400"></label>
+			</div>
+			<div class="form-group col-xs-12">
+				<label class="control-label">Exercise Level</label>
+				<select class="form-control" id="exercise-level">
+					<option value="bmr">Basal Metabolic Rate</option>
+					<option value="lne">Little/No Exercise</option>
+					<option value="3x" selected>3 times/week</option>
+					<option value="4x">4 times/week</option>
+					<option value="5x">5 times/week</option>
+					<option value="daily">Daily</option>
+					<option value="5x+">5 times/week (intense)</option>
+					<option value="daily+">Daily (intense) or twice daily</option>
+					<option value="daily+job">Daily exercise + physical job</option>
+				</select>
+				<div class="panel panel-default" style="margin-top: 10px">
+					<div class="panel-body exercise-info">Exercise = 15-30 mins elevated heart rate.</div>
+					<div class="panel-body exercise-info">Intense = 45+ mins elevated heart rate.</div>
+				</div>
+			</div>
+			<div class="form-group col-xs-12">
+				<button type="button" id="options-button" class="btn btn-default">Options</button>
+				<button type="submit" class="btn btn-primary">Calculate</button>
+			</div>
+			<div class="form-group col-xs-12" id="results" style="display: none">
+				<h4>Total Calories (Including Exercise)</h4>
+				<label class="control-label">Maintenance: </label>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<p id="maintenance-cals" style="font-size: 16px; margin: 0px;"></p>
+					</div>
+				</div>
+				<label class="control-label">Fat loss: </label>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<p id="fat-loss-cals" style="font-size: 16px; margin: 0px;"></p>
+					</div>
+				</div>
+			</div>
+			<div class="form-group col-xs-12" id="options" style="display: none">
+				<label class="control-label">Units:</label>
+				<label class="radio-inline"><input type="radio" id="calories-radio" name="units" value="calories" checked> Calories</label>
+				<label class="radio-inline"><input type="radio" id="kilojoules-radio" name="units" value="kilojoules"> Kilojoules</label>
+			</div>
+			<div class="form-group col-xs-12" id="macro-calc-link">
+				<label class="control-label"><a href="#">Go To MacroNutrient Ratio Calculator</a></label>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
+
+
+<!-- MAKE SURE THIS SCRIPT IS AFTER THE ABOVE HTML -->
+<script type="text/javascript">
+	$(function() {
+		$('#cms-radio').on('click', function() {
+			$('#imp-text-div').css('display', 'none')
+			$('#results').css('display', 'none')
+			$('#cms-text-div').css('display', 'unset')
+			$('#cms-text').attr('required')
+			$('#feet-text').removeAttr('required')
+			$('#inches-text').removeAttr('required')
+		})
+
+		$('#feet-radio').on('click', function() {
+			$('#imp-text-div').css('display', 'unset')
+			$('#cms-text-div').css('display', 'none')
+		})
+
+		$('#options-button').on('click', function() {
+			$('#results').css('display', 'none')
+			$('#options').css('display', 'unset')
+		})
+
+		function calculate(age, gender, weight, height, exercise) {
+			if ($('.calorie-calculator').width() == 598) {
+				$('.calorie-calculator').css('height', '950')
+			}
+			
+			$('#options').css('display', 'none')
+			$('#maintenance-cals').html('')
+			$('#fat-loss-cals').html('')
+
+			var maintenanceCals
+			var fatLossCals
+
+			if (gender === 'male') {
+				maintenanceCals = ((10 * weight) + (6.25 * height) - (5 * age) + 5) * exercise
+			} else {
+				maintenanceCals = ((10 * weight) + (6.25 * height) - (5 * age) - 161) * exercise
+			}
+
+			fatLossCals = maintenanceCals * 0.80
+
+			var calories = $('#calories-radio').is(':checked')
+			var kilojoules = $('#kilojoules-radio').is(':checked')
+
+			var units = 'calories/day'
+
+			if (kilojoules) {
+				maintenanceCals *= 4.184
+				fatLossCals *= 4.184
+				units = 'kj/day'
+			}
+
+			$('#results').css('display', 'unset')
+			$('#maintenance-cals').append('<strong style="color: blue">' + maintenanceCals.toFixed(0) + '</strong> ' + units)
+			$('#fat-loss-cals').append('<strong style="color: blue">' + fatLossCals.toFixed(0) + '</strong> ' + units)
+		}
+
+		$('.calc-form').on('submit', function(e) {
+			e.preventDefault()
+
+			var yearsText = $('#years-text').val()
+			var maleRadio = $('#male-radio').is(':checked')
+			var femaleRadio = $('#female-radio').is(':checked')
+			var weightText = $('#weight-text').val()
+			var poundsRadio = $('#pounds-radio').is(':checked')
+			var kilosRadio = $('#kilos-radio').is(':checked')
+			var feetRadio = $('#feet-radio').is(':checked')
+			var cmsRadio = $('#cms-radio').is(':checked')
+			var feetText = $('#feet-text').val()
+			var cmsText = $('#cms-text').val()
+			var inchesText = $('#inches-text').val()
+			var exerciseLevel = $('#exercise-level option:selected').text()
+
+			var age = yearsText
+
+			var gender
+			if (maleRadio) {
+				gender = 'male'
+			} else {
+				gender = 'female'
+			}
+
+			var weight
+			if (kilosRadio) {
+				weight = weightText
+			} else {
+				weight = parseFloat(weightText) * 0.453592
+			}
+
+			var height
+			if (feetRadio) {
+				height = (feetText * 30.48) + (inchesText * 2.54)
+			} else {
+				height = cmsText
+			}
+
+			var exercise
+
+			switch (exerciseLevel) {
+				case 'Basal Metabolic Rate':
+					exercise = 1
+					break
+				case 'Little/No Exercise':
+					exercise = 1.2
+					break
+				case '3 times/week':
+					exercise = 1.375
+					break
+				case '4 times/week':
+					exercise = 1.42
+					break
+				case '5 times/week':
+					exercise = 1.465
+					break
+				case 'Daily':
+					exercise = 1.552
+					break
+				case '5 times/week (intense)':
+					exercise = 1.64
+					break
+				case 'Daily (intense) or twice daily':
+					exercise = 1.7265
+					break
+				case 'Daily exercise + physical job':
+					exercise = 1.902
+					break
+			}
+
+			calculate(age, gender, weight, height, exercise)
+		})
+	})
+</script>

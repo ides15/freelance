@@ -1,0 +1,211 @@
+<!-- MAKE SURE THESE SCRIPTS, LINK AND STYLES ARE ABOVE THE HTML CODE BELOW -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<style type="text/css">
+	.calorie-calculator {
+		border: 1px solid lightGrey;
+		height: 800px;
+		max-width: 650px;
+	}
+
+	.options-container {
+		margin-left: 50px;
+		margin-right: 50px;
+		margin-bottom: 20px;
+	}
+
+	h3 {
+		margin: 0px;
+		text-align: center;
+	}
+
+	.jumbotron {
+		padding: 20px;
+	}
+
+	td, th {
+		padding: 5px;
+	}
+
+	@media only screen and (max-width: 500px) {
+		#table-div {
+			margin-left: -40px;
+		}
+
+		.calorie-calculator {
+			height: 860px;
+		}
+	}
+</style>
+
+
+
+
+
+<!-- PUT THIS HTML IN YOUR WEBSITE'S HTML WHEREVER YOU WANT IT TO GO -->
+<div class="calorie-calculator">
+	<form class="calc-form">
+		<div class="jumbotron">
+			<h3><strong>MacroNutrient Ratio Calculator</strong></h3>
+		</div>
+		<div class="options-container">
+
+			<div class="form-group col-xs-12">
+				<label class="control-label">Calories per day: (<a href="#">Daily Calorie Calculator</a>)</label>
+				<input type="number" class="form-control" id="calories-text" name="calories" min="1" max="1000000" value="2000" required>
+			</div>
+
+			<div class="form-group col-xs-12">
+				<label class="control-label">Common Diet Ratio:</label>
+				<button type="submit" id="moderate" class="list-group-item active">Moderate 50/25/25</button>
+				<button type="submit" id="zone" class="list-group-item">Zone Diet 40/30/30</button>
+				<button type="submit" id="low-carb" class="list-group-item">Low Carb 25/40/35</button>
+				<button type="submit" id="v-low-carb" class="list-group-item">Keto 10/45/45</button>
+			</div>
+
+			<div class="col-xs-12" id="imp-text-div">
+				<label class="control-label">Carbohydrate:</label>
+				<div class="form-group input-group col-xs-6 col-sm-4 col-md-4 col-lg-4">
+					<input type="number" class="form-control" id="carb-text" name="macros" min="0" max="100" value="50" required>
+					<span class="input-group-addon">%</span>
+				</div>
+
+				<label class="control-label">Protein:</label>
+				<div class="form-group input-group col-xs-6 col-sm-4 col-md-4 col-lg-4">
+					<input type="number" class="form-control" id="protein-text" name="macros" min="0" max="100" value="25" required>
+					<span class="input-group-addon">%</span>
+				</div>
+
+				<label class="control-label">Fat:</label>
+				<div class="form-group input-group col-xs-6 col-sm-4 col-md-4 col-lg-4">
+					<input type="number" class="form-control" id="fat-text" name="macros" min="0" max="100" value="25" required>
+					<span class="input-group-addon">%</span>
+				</div>
+			</div>
+
+			<div class="form-group col-xs-12">
+				<button type="submit" id="calculate-button" class="btn btn-primary">Calculate</button>
+				<span id="percentage-error" style="display: none; margin-left: 10px"><label style="color: red">Percentages must add up to 100%</label></span>
+			</div>
+
+			<div class="form-group col-xs-12" id="table-div" style="margin-top: 10px;">
+				<table class="table-striped table-bordered col-xs-12">
+					<thead>
+						<tr>
+							<th></th>
+							<th>CARB</th>
+							<th>PROTEIN</th>
+							<th>FAT</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><strong>GRAMS</strong> per day</td>
+							<td id="cgd"></td>
+							<td id="pgd"></td>
+							<td id="fgd"></td>
+						</tr>
+						<tr>
+							<td><strong>CALORIES</strong> per day</td>
+							<td id="ccd"></td>
+							<td id="pcd"></td>
+							<td id="fcd"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+	$(function() {
+		var target = 'Moderate'
+
+		function calculateMacros(e) {
+			var carbs
+			var proteins
+			var fats
+
+			switch(e) {
+				case 'Moderate 50/25/25': {
+					carbs = 50
+					proteins = 25
+					fats = 25
+					break
+				}
+				case 'Zone Diet 40/30/30': {
+					carbs = 40
+					proteins = 30
+					fats = 30
+					break
+				}
+				case 'Low Carb 25/40/35': {
+					carbs = 25
+					proteins = 40
+					fats = 35
+					break
+				}
+				case 'Keto 10/45/45': {
+					carbs = 10
+					proteins = 45
+					fats = 45
+					break
+				}
+			}
+
+			$('#carb-text').val(carbs)
+			$('#protein-text').val(proteins)
+			$('#fat-text').val(fats)
+		}
+
+		function calculate(e) {
+			var threeRadio = $('#three-radio').is(':checked')
+			var fourRadio = $('#four-radio').is(':checked')
+			var fiveRadio = $('#five-radio').is(':checked')
+			var sixRadio = $('#six-radio').is(':checked')
+
+			var cals = $('#calories-text').val()
+			var carbs = $('#carb-text').val()
+			var proteins = $('#protein-text').val()
+			var fats = $('#fat-text').val()
+
+			$('#cgd').html(((cals * (0.01 * carbs)) / 4).toFixed(0) + ' g')
+			$('#pgd').html(((cals * (0.01 * proteins)) / 4).toFixed(0) + ' g')
+			$('#fgd').html(((cals * (0.01 * fats)) / 9).toFixed(0) + ' g')
+			$('#ccd').html((cals * (0.01 * carbs)).toFixed(0) + ' cals')
+			$('#pcd').html((cals * (0.01 * proteins)).toFixed(0) + ' cals')
+			$('#fcd').html((cals * (0.01 * fats)).toFixed(0) + ' cals')
+		}
+
+		$('.list-group-item').click(function(e) {
+			$(this).addClass('active').siblings().removeClass('active')
+
+			target = e.target.outerText
+
+			calculateMacros(target)
+		})
+
+		$('.calc-form').on('submit', function(e) {
+			e.preventDefault()
+
+			var carb = parseFloat($('#carb-text').val())
+			var protein = parseFloat($('#protein-text').val())
+			var fat = parseFloat($('#fat-text').val())
+			
+			if (carb + protein + fat === 100) {
+				$('#percentage-error').css('display', 'none')
+				calculate(target)
+			} else {
+				$('#percentage-error').css('display', 'unset')
+			}
+		})
+	})
+</script>

@@ -1,0 +1,310 @@
+<html>
+
+<head>
+	
+	<style>
+		
+		#container {
+			width: 750px;
+			height: 600px;
+			margin: 0px auto;
+			padding: 10px;
+			background-color: green;
+			border: 1px solid red;
+		}
+		
+		#loan_src {
+			float: left;
+			width: 300px;
+			height: 220px;
+			margin-bottom: 10px;
+			background-color: white;
+			border: 1px solid gold;
+		}
+		
+		#loan_info {
+			float: right;
+			width: 400px;
+			height: 220px;
+			margin-bottom: 10px;
+			background-color: gold;
+			border: 1px solid purple;
+		}
+		
+		#table_header {
+			clear:both;
+			width: 600px;
+			height: 50px;
+			background-color: blue;
+			border: 1px solid orange;
+		}
+		
+		#table {
+			overflow: auto;
+			width: 600px;
+			height: 200px;
+			background-color: pink;
+			border: 1px solid black;
+		}
+		
+		table { align: center; font-family: sans-serif; font-size: 13px;}
+	</style>
+
+</head>
+
+<body>
+	
+	<div id="container"> <!--id is unique to a page-->
+		<h2>Loan Installment Calculator</h2>
+		
+		<div id="loan_src">
+			<form name="loan_form">
+				<table style="margin:10px">
+					<tr>
+						<td><strong>Loan Amount:</strong></td>
+						<td><input type="text" name="loan_amt" id="loan_amt" size="10" value="140000" style="text-align:right;" /></td>
+					</tr>
+					
+					<tr>
+						<td><strong>Number of Months:</strong></td>
+						<td><input type="text" name="months" size="10" value="360" style="text-align:right;" /></td>
+					</tr>
+					
+					<tr>
+						<td><strong>Annual Interest Rate:</strong><br/><span style="font-size: 80%">(ex. 4.5% = 4.5)</span></td>
+						<td><input type="text" name="rate" size="10" value="3" style="text-align:right;" /></td>
+					</tr>
+					
+					<tr>
+						<td><strong>Extra Monthly Payment:</strong></td>
+						<td><input type="text" name="extra" size="10" value="0" style="text-align:right;"/></td>
+					</tr>
+					
+					<tr>
+						<td><strong>Mtg Balance at End of Yr:</strong></td>
+						<td><input type="text" name="mtg_eoy" size="10" value="7" style="text-align:right;"/></td>
+					</tr>
+					
+				   
+					
+					<tr>
+						<td><input type="button" onclick="validate()" value="Calculate" size="10" /></td>
+						<td><input type="button" onclick="startOver()" value="Start Over" size="10" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		
+		<div id="loan_info">
+			Loan Info
+		</div>
+		
+		<div id="table_header">
+			<table cellpadding="15" border="1">
+		 
+				<tr>
+					<td width="30" align="center"><b>Pmt</b></td>
+					<td width="60" align="center"><b>Payment</b></td>
+					<td width="60" align="center"><b>Principal</b></td>
+					<td width="60" align="center"><b>Interest</b></td>
+					<td width="85" align="center"><b>Interest Paid</b></td>
+					<td width="70" align="center"><b>Balance</b></td>
+				</tr>
+			</table>
+		</div>
+		
+		<div id="table">
+			Tabler
+		</div>
+		
+	</div>
+
+</body>
+
+<footer>
+	
+	<script>
+		function startOver(){
+			
+			document.loan_form.loan_amt.value="180000";
+			document.loan_form.months.value="360";
+			document.loan_form.rate.value="6";
+			document.loan_form.extra.value="0";
+			
+			document.getElementById("loan_info").innerHTML="";
+			
+			document.getElementById("table").innerHTML="";
+			
+		}
+		
+		function validate(){
+			
+			var loan_amt = document.loan_form.loan_amt.value;
+			var months = document.loan_form.months.value;
+			var rate = document.loan_form.rate.value;
+			var extra = document.loan_form.extra.value;
+			var mtg_eoy = document.loan_form.mtg_eoy.value;
+
+
+
+			if (loan_amt <=0) {
+				alert("Please enter a valid loan amount");
+			}
+			
+			else if (months <=0){
+				alert("Please enter a valid number of months");
+			}
+			
+			else if (rate <=0){
+				alert("Please enter a valid interest rate");
+			}
+			
+			if (extra <0){
+				alert("Please enter a valid extra payment");
+			}
+			
+			else {
+				calculate(parseFloat(loan_amt), parseFloat(months), parseFloat(rate), parseFloat(extra), parseFloat(mtg_eoy));
+			}
+		}
+		
+		function calculate(loan_amt, months, rate, extra, mtg_eoy){
+			
+			i = rate/100/12;
+		
+			p = mtg_eoy * 12;
+			
+			
+		 
+			var monthly_payment = loan_amt * (i *(Math.pow((1+i),months))) / (Math.pow((1+i), months) - 1);
+			var rb1 = loan_amt;
+			var rb2 = (Math.pow((1+i),months));
+			var rb3 = (Math.pow((1+i),p));
+			var rb4 = (rb2 -  rb3);
+			var rb5 = (loan_amt * rb4);
+			var rb6 = ((Math.pow((1+i),months))-1);
+			var remaining_balance = rb5 / rb6;
+
+
+			//((Math.pow((1+i),months)))
+
+
+			//loan_amt * (i *(Math.pow((1+i),months))) / ((Math.pow(1+i),months) - 1);
+
+			var total = parseFloat(monthly_payment) + parseFloat(extra);
+
+
+
+			var table="";
+
+			table += "<table cellpadding='15' border='1'>";
+
+			table += "<tr>";
+			table += "<td width='30'>0</td>";
+			table += "<td width='60'>0</td>";
+			table += "<td width='60'>0</td>";
+			table += "<td width='60'>0</td>";
+			table += "<td width='85'>0</td>";
+			table += "<td width='70'>"+round(loan_amt,2)+"</td>";
+			table +="</tr>";
+			
+			var current_balance = loan_amt;
+			var payment_counter = 1;
+			var total_interest = 0;
+			var total_mtg_int_exp = 0; // number represented in 'Mtg Int Exp for Year:' in the yellow box
+			
+			monthly_payment = monthly_payment + extra;
+			
+			while(current_balance > 0){  // creates rows
+
+				towards_interest = (i * current_balance); 
+				towards_balance = monthly_payment - towards_interest;
+				total_interest = total + towards_interest;
+				current_balance = current_balance - towards_balance;
+				
+
+				var top_year = mtg_eoy * 12;
+				var bottom_year = top_year - 11;
+				// the if statement below checks to see if the payment number is equal to
+				// the months associated with the year in 'Mtg Balance at End of Yr:' in 
+				// the white box. If it within that number + 11 months (a full year), then
+				// the towards_interest will be added to the total_mtg_int_exp. Once the
+				// table is done populating, the total_mtg_int_exp will be shown in the 
+				// yellow box.
+				if (payment_counter >= bottom_year && payment_counter <= top_year){
+					total_mtg_int_exp += towards_interest;
+					// console.log(payment_counter, total_mtg_int_exp);
+				}
+				
+				// display row
+				
+				table +="<tr>";
+					table += "<td>"+payment_counter+"</td>";
+					table += "<td>"+round(monthly_payment,2)+"</td>";
+					table += "<td>"+round(towards_balance,2)+"</td>";
+					table += "<td>"+round(towards_interest,2)+"</td>";
+					table += "<td>"+round(total_interest,2)+"</td>";
+					table += "<td>"+round(current_balance,2)+"</td>";
+				table += "</tr>";
+				
+				payment_counter++;
+				
+			}
+			
+
+			// I also moved the populating of the tables down farther in the function
+			// so that the total_mtg_int_exp variable is defined when it adds to the
+			// 'info' var.
+
+			var info = "";  //This creates a variable "info"
+
+			info += "<table width='250'>";
+			info += "<tr><td>Loan Amount:</td>";
+			info +="<td align='right'>$"+loan_amt+"</td></tr>";
+
+			info +="<tr><td>Number of Months:</td>";
+			info +="<td align='right'>"+months+"</td></tr>";
+
+			info +="<tr><td>Interest Rate:</td>";
+			info +="<td align='right'>"+rate+"%</td></tr>";
+
+			info +="<tr><td>Monthly Payment:</td>";
+			info +="<td align='right'>$"+round(monthly_payment,2)+"</td></tr>";
+
+			info +="<tr><td>Extra Payment:</td>";
+			info +="<td align='right'>$"+extra+"</td></tr>";
+
+			info +="<tr><td>Total Payment:</td>";
+			info +="<td align='right'>$"+round(total,2)+"</td></tr>";
+
+			info +="<tr><td>Mtg Bal EoY:</td>";
+			info +="<td align='right'>$"+round(remaining_balance,2)+"</td></tr>";
+
+
+			info +="<tr><td>Mtg Int Exp for Year:</td>";
+			info +="<td align='right'>$"+round(total_mtg_int_exp,2)+"</td></tr>";
+
+			info +="</table>";
+
+			document.getElementById("loan_info").innerHTML = info;  //This puts the info are into the Loan Info ID
+
+			//------------------
+			
+			table +="</table>";
+			
+			document.getElementById("table").innerHTML = table; //sends it to div id=table
+		}
+
+
+
+		function round(num, dec) {
+			//return new Number(+num.toFixed(dec));
+			return (Math.round(num*Math.pow(10,dec))/Math.pow(10,dec).toFixed(dec));
+		}
+
+	</script>
+
+</footer>
+
+
+</html>

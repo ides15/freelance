@@ -1,0 +1,13 @@
+Project Description
+I need a version of two online free calculators just slightly modified for our own use.
+
+1. https://www.freedieting.com/tools/calorie_calculator.htm (based on the Mifflin-St Jeor formula which is published many places online.) We would not need the Calories per day or per meal. Everything else we would like as is.
+
+2. https://www.freedieting.com/tools/nutrient_calculator.htm
+
+I'm not technical so however you can find the equations/code is beyond my knowledge.
+
+
+
+
+
