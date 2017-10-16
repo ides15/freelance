@@ -145,132 +145,132 @@
 <script type="text/javascript">
 	$(function() {
 		$('#cms-radio').on('click', function() {
-			$('#imp-text-div').css('display', 'none')
-			$('#results').css('display', 'none')
-			$('#cms-text-div').css('display', 'unset')
-			$('#cms-text').attr('required')
-			$('#feet-text').removeAttr('required')
-			$('#inches-text').removeAttr('required')
-		})
+			$('#imp-text-div').css('display', 'none');
+			$('#results').css('display', 'none');
+			$('#cms-text-div').css('display', 'unset');
+			$('#cms-text').attr('required');
+			$('#feet-text').removeAttr('required');
+			$('#inches-text').removeAttr('required');
+		});
 
 		$('#feet-radio').on('click', function() {
-			$('#imp-text-div').css('display', 'unset')
-			$('#cms-text-div').css('display', 'none')
-		})
+			$('#imp-text-div').css('display', 'unset');
+			$('#cms-text-div').css('display', 'none');
+		});
 
 		$('#options-button').on('click', function() {
-			$('#results').css('display', 'none')
-			$('#options').css('display', 'unset')
-		})
+			$('#results').css('display', 'none');
+			$('#options').css('display', 'unset');
+		});
 
 		function calculate(age, gender, weight, height, exercise) {
 			if ($('.calorie-calculator').width() == 598) {
-				$('.calorie-calculator').css('height', '950')
+				$('.calorie-calculator').css('height', '950');
 			}
 			
-			$('#options').css('display', 'none')
-			$('#maintenance-cals').html('')
-			$('#fat-loss-cals').html('')
+			$('#options').css('display', 'none');
+			$('#maintenance-cals').html('');
+			$('#fat-loss-cals').html('');
 
-			var maintenanceCals
-			var fatLossCals
+			var maintenanceCals;
+			var fatLossCals;
 
 			if (gender === 'male') {
-				maintenanceCals = ((10 * weight) + (6.25 * height) - (5 * age) + 5) * exercise
+				maintenanceCals = ((10 * weight) + (6.25 * height) - (5 * age) + 5) * exercise;
 			} else {
-				maintenanceCals = ((10 * weight) + (6.25 * height) - (5 * age) - 161) * exercise
+				maintenanceCals = ((10 * weight) + (6.25 * height) - (5 * age) - 161) * exercise;
 			}
 
-			fatLossCals = maintenanceCals * 0.80
+			fatLossCals = maintenanceCals * 0.80;
 
-			var calories = $('#calories-radio').is(':checked')
-			var kilojoules = $('#kilojoules-radio').is(':checked')
+			var calories = $('#calories-radio').is(':checked');
+			var kilojoules = $('#kilojoules-radio').is(':checked');
 
-			var units = 'calories/day'
+			var units = 'calories/day';
 
 			if (kilojoules) {
-				maintenanceCals *= 4.184
-				fatLossCals *= 4.184
-				units = 'kj/day'
+				maintenanceCals *= 4.184;
+				fatLossCals *= 4.184;
+				units = 'kj/day';
 			}
 
-			$('#results').css('display', 'unset')
-			$('#maintenance-cals').append('<strong style="color: blue">' + maintenanceCals.toFixed(0) + '</strong> ' + units)
-			$('#fat-loss-cals').append('<strong style="color: blue">' + fatLossCals.toFixed(0) + '</strong> ' + units)
+			$('#results').css('display', 'unset');
+			$('#maintenance-cals').append('<strong style="color: blue">' + maintenanceCals.toFixed(0) + '</strong> ' + units);
+			$('#fat-loss-cals').append('<strong style="color: blue">' + fatLossCals.toFixed(0) + '</strong> ' + units);
 		}
 
 		$('.calc-form').on('submit', function(e) {
-			e.preventDefault()
+			e.preventDefault();
 
-			var yearsText = $('#years-text').val()
-			var maleRadio = $('#male-radio').is(':checked')
-			var femaleRadio = $('#female-radio').is(':checked')
-			var weightText = $('#weight-text').val()
-			var poundsRadio = $('#pounds-radio').is(':checked')
-			var kilosRadio = $('#kilos-radio').is(':checked')
-			var feetRadio = $('#feet-radio').is(':checked')
-			var cmsRadio = $('#cms-radio').is(':checked')
-			var feetText = $('#feet-text').val()
-			var cmsText = $('#cms-text').val()
-			var inchesText = $('#inches-text').val()
-			var exerciseLevel = $('#exercise-level option:selected').text()
+			var yearsText = $('#years-text').val();
+			var maleRadio = $('#male-radio').is(':checked');
+			var femaleRadio = $('#female-radio').is(':checked');
+			var weightText = $('#weight-text').val();
+			var poundsRadio = $('#pounds-radio').is(':checked');
+			var kilosRadio = $('#kilos-radio').is(':checked');
+			var feetRadio = $('#feet-radio').is(':checked');
+			var cmsRadio = $('#cms-radio').is(':checked');
+			var feetText = $('#feet-text').val();
+			var cmsText = $('#cms-text').val();
+			var inchesText = $('#inches-text').val();
+			var exerciseLevel = $('#exercise-level option:selected').text();
 
-			var age = yearsText
+			var age = yearsText;
 
-			var gender
+			var gender;
 			if (maleRadio) {
-				gender = 'male'
+				gender = 'male';
 			} else {
-				gender = 'female'
+				gender = 'female';
 			}
 
-			var weight
+			var weight;
 			if (kilosRadio) {
-				weight = weightText
+				weight = weightText;
 			} else {
-				weight = parseFloat(weightText) * 0.453592
+				weight = parseFloat(weightText) * 0.453592;
 			}
 
-			var height
+			var height;
 			if (feetRadio) {
-				height = (feetText * 30.48) + (inchesText * 2.54)
+				height = (feetText * 30.48) + (inchesText * 2.54);
 			} else {
-				height = cmsText
+				height = cmsText;
 			}
 
-			var exercise
+			var exercise;
 
 			switch (exerciseLevel) {
 				case 'Basal Metabolic Rate':
-					exercise = 1
-					break
+					exercise = 1;
+					break;
 				case 'Little/No Exercise':
-					exercise = 1.2
-					break
+					exercise = 1.2;
+					break;
 				case '3 times/week':
-					exercise = 1.375
-					break
+					exercise = 1.375;
+					break;
 				case '4 times/week':
-					exercise = 1.42
-					break
+					exercise = 1.42;
+					break;
 				case '5 times/week':
-					exercise = 1.465
-					break
+					exercise = 1.465;
+					break;
 				case 'Daily':
-					exercise = 1.552
-					break
+					exercise = 1.552;
+					break;
 				case '5 times/week (intense)':
-					exercise = 1.64
-					break
+					exercise = 1.64;
+					break;
 				case 'Daily (intense) or twice daily':
-					exercise = 1.7265
-					break
+					exercise = 1.7265;
+					break;
 				case 'Daily exercise + physical job':
-					exercise = 1.902
-					break
+					exercise = 1.902;
+					break;
 			}
 
-			calculate(age, gender, weight, height, exercise)
-		})
-	})
+			calculate(age, gender, weight, height, exercise);
+		});
+	});
 </script>
