@@ -127,85 +127,85 @@
 
 <script type="text/javascript">
 	$(function() {
-		var target = 'Moderate'
+		var target = 'Moderate';
 
 		function calculateMacros(e) {
-			var carbs
-			var proteins
-			var fats
+			var carbs;
+			var proteins;
+			var fats;
 
 			switch(e) {
 				case 'Moderate 50/25/25': {
-					carbs = 50
-					proteins = 25
-					fats = 25
-					break
+					carbs = 50;
+					proteins = 25;
+					fats = 25;
+					break;
 				}
 				case 'Zone Diet 40/30/30': {
-					carbs = 40
-					proteins = 30
-					fats = 30
-					break
+					carbs = 40;
+					proteins = 30;
+					fats = 30;
+					break;
 				}
 				case 'Low Carb 25/40/35': {
-					carbs = 25
-					proteins = 40
-					fats = 35
-					break
+					carbs = 25;
+					proteins = 40;
+					fats = 35;
+					break;
 				}
 				case 'Keto 10/45/45': {
-					carbs = 10
-					proteins = 45
-					fats = 45
-					break
+					carbs = 10;
+					proteins = 45;
+					fats = 45;
+					break;
 				}
 			}
 
-			$('#carb-text').val(carbs)
-			$('#protein-text').val(proteins)
-			$('#fat-text').val(fats)
+			$('#carb-text').val(carbs);
+			$('#protein-text').val(proteins);
+			$('#fat-text').val(fats);
 		}
 
 		function calculate(e) {
-			var threeRadio = $('#three-radio').is(':checked')
-			var fourRadio = $('#four-radio').is(':checked')
-			var fiveRadio = $('#five-radio').is(':checked')
-			var sixRadio = $('#six-radio').is(':checked')
+			var threeRadio = $('#three-radio').is(':checked');
+			var fourRadio = $('#four-radio').is(':checked');
+			var fiveRadio = $('#five-radio').is(':checked');
+			var sixRadio = $('#six-radio').is(':checked');
 
-			var cals = $('#calories-text').val()
-			var carbs = $('#carb-text').val()
-			var proteins = $('#protein-text').val()
-			var fats = $('#fat-text').val()
+			var cals = $('#calories-text').val();
+			var carbs = $('#carb-text').val();
+			var proteins = $('#protein-text').val();
+			var fats = $('#fat-text').val();
 
-			$('#cgd').html(((cals * (0.01 * carbs)) / 4).toFixed(0) + ' g')
-			$('#pgd').html(((cals * (0.01 * proteins)) / 4).toFixed(0) + ' g')
-			$('#fgd').html(((cals * (0.01 * fats)) / 9).toFixed(0) + ' g')
-			$('#ccd').html((cals * (0.01 * carbs)).toFixed(0) + ' cals')
-			$('#pcd').html((cals * (0.01 * proteins)).toFixed(0) + ' cals')
-			$('#fcd').html((cals * (0.01 * fats)).toFixed(0) + ' cals')
+			$('#cgd').html(((cals * (0.01 * carbs)) / 4).toFixed(0) + ' g');
+			$('#pgd').html(((cals * (0.01 * proteins)) / 4).toFixed(0) + ' g');
+			$('#fgd').html(((cals * (0.01 * fats)) / 9).toFixed(0) + ' g');
+			$('#ccd').html((cals * (0.01 * carbs)).toFixed(0) + ' cals');
+			$('#pcd').html((cals * (0.01 * proteins)).toFixed(0) + ' cals');
+			$('#fcd').html((cals * (0.01 * fats)).toFixed(0) + ' cals');
 		}
 
 		$('.list-group-item').click(function(e) {
-			$(this).addClass('active').siblings().removeClass('active')
+			$(this).addClass('active').siblings().removeClass('active');
 
-			target = e.target.outerText
+			target = e.target.outerText;
 
-			calculateMacros(target)
-		})
+			calculateMacros(target);
+		});
 
 		$('.calc-form').on('submit', function(e) {
-			e.preventDefault()
+			e.preventDefault();
 
-			var carb = parseFloat($('#carb-text').val())
-			var protein = parseFloat($('#protein-text').val())
-			var fat = parseFloat($('#fat-text').val())
+			var carb = parseFloat($('#carb-text').val());
+			var protein = parseFloat($('#protein-text').val());
+			var fat = parseFloat($('#fat-text').val());
 			
 			if (carb + protein + fat === 100) {
-				$('#percentage-error').css('display', 'none')
-				calculate(target)
+				$('#percentage-error').css('display', 'none');
+				calculate(target);
 			} else {
-				$('#percentage-error').css('display', 'unset')
+				$('#percentage-error').css('display', 'unset');
 			}
-		})
-	})
+		});
+	});
 </script>
