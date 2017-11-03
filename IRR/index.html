@@ -6,11 +6,6 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 
 <head>
 	<!-- <link href='style.css' rel='stylesheet'> -->
-	<style>
-		tr, td {
-			border: 1px solid black;
-		}
-	</style>
 </head>
 
 <body>
@@ -29,25 +24,32 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 		<div class="box" id="three">
 			<form name="loan_form">
 				<br>
-				<table id="irr-table" style="margin: 10px">
-					<tr>
-						<td><strong>Discount Rate</strong></td>
+				<table id="irr-table" style="margin: 10px">						<tr>
+							<td><strong>Discount Rate</strong></td>
+							<td>
+								<input type="text" name="dr" size="10" value="10" style="text-align:right" />
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Purchase Price:</strong></td>
+							<td>
+								<input type="text" name="purc" size="10" value="-100,000" style="text-align:right" />
+							</td>
+						</tr>
+						<tr>
+							<td style="padding-top: 20px">
+								<button id="addYear">Add Cash Flow Year</button>
+							</td>
+							<td style="padding-top: 20px">
+								<button id="removeYear">Remove Cash Flow Year</button>
+							</td>
+						</tr>
+					<tr id="1">
 						<td>
-							<input type="text" name="dr" size="10" value="10" style="text-align:right" />
+							Cash Flow Year 1: 
 						</td>
-					</tr>
-					<tr>
-						<td><strong>Purchase Price:</strong></td>
 						<td>
-							<input type="text" name="purc" size="10" value="-100,000" style="text-align:right" />
-						</td>
-					</tr>
-					<tr>
-						<td style="padding-top: 20px">
-							<button id="addYear">Add Cash Flow Year</button>
-						</td>
-						<td style="padding-top: 20px">
-							<button id="removeYear" style="display: none">Remove Cash Flow Year</button>
+							<input type="text">
 						</td>
 					</tr>
 				</table>
@@ -57,13 +59,13 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 </body>
 
 <script>
-	var numberOfYears = 0;
+	var numberOfYears = 1;
 
 	document.getElementById('addYear').addEventListener('click', function(e) {
 		e.preventDefault()
 		numberOfYears++;
 
-		if(numberOfYears > 1) {
+		if(numberOfYears >= 1) {
 			document.getElementById('removeYear').setAttribute('style', 'display: unset');
 		}
 
@@ -74,7 +76,7 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 		e.preventDefault()
 		numberOfYears--;
 
-		if(numberOfYears <= 1) {
+		if(numberOfYears === 0) {
 			this.setAttribute('style', 'display: none');
 		}
 
