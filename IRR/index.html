@@ -6,6 +6,11 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 
 <head>
 	<!-- <link href='style.css' rel='stylesheet'> -->
+	<style>
+		tr, td {
+			border: 1px solid black;
+		}
+	</style>
 </head>
 
 <body>
@@ -39,7 +44,7 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 					</tr>
 					<tr>
 						<td style="padding-top: 20px">
-							<button id="addCashFlowButton">Add Cash Flow Year</button>
+							<button id="addYear">Add Cash Flow Year</button>
 						</td>
 					</tr>
 				</table>
@@ -47,13 +52,10 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 		</div>
 	</div>
 </body>
-<script>
-	var numberOfYears = 0;
-	document.getElementById('addCashFlowButton').addEventListener("click", function(e) {
-		e.preventDefault();
-		numberOfYears++;
 
-		document.getElementById('irr-table')
-	})
+<script>
+	var numberOfYears = 1;
+
+	document.getElementById('addYear').addEventListener("click", );
 </script>
 </html>
