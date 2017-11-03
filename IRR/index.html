@@ -77,18 +77,21 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 		if(numberOfYears <= 1) {
 			this.setAttribute('style', 'display: none');
 		}
+
+		var row = document.getElementById(numberOfYears + 1);
+		row.parentNode.removeChild(row);
 	})
 
 	function addRow(number) {
 		var table = document.getElementById('irr-table');
 		var tr = document.createElement('tr');
+		tr.setAttribute('id', number);
 		var tdLabel = document.createElement('td');
 		var label = document.createTextNode('Cash Flow Year ' + number + ': ');
 		tdLabel.appendChild(label);
 		var tdInput = document.createElement('td');
 		var input = document.createElement('input')
 		input.setAttribute('type', 'text');
-		input.setAttribute('id', number);
 		tdInput.appendChild(input);
 		tr.appendChild(tdLabel);
 		tr.appendChild(tdInput);
