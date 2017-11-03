@@ -46,6 +46,9 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 						<td style="padding-top: 20px">
 							<button id="addYear">Add Cash Flow Year</button>
 						</td>
+						<td style="padding-top: 20px">
+							<button id="removeYear" style="display: none">Remove Cash Flow Year</button>
+						</td>
 					</tr>
 				</table>
 			</form>
@@ -54,8 +57,43 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 </body>
 
 <script>
-	var numberOfYears = 1;
+	var numberOfYears = 0;
 
-	document.getElementById('addYear').addEventListener("click", );
+	document.getElementById('addYear').addEventListener('click', function(e) {
+		e.preventDefault()
+		numberOfYears++;
+
+		if(numberOfYears > 1) {
+			document.getElementById('removeYear').setAttribute('style', 'display: unset');
+		}
+
+		addRow(numberOfYears);
+	})
+
+	document.getElementById('removeYear').addEventListener('click', function(e) {
+		e.preventDefault()
+		numberOfYears--;
+
+		if(numberOfYears <= 1) {
+			this.setAttribute('style', 'display: none');
+		}
+	})
+
+	function addRow(number) {
+		var table = document.getElementById('irr-table');
+		var tr = document.createElement('tr');
+		var tdLabel = document.createElement('td');
+		var label = document.createTextNode('Cash Flow Year ' + number + ': ');
+		tdLabel.appendChild(label);
+		var tdInput = document.createElement('td');
+		var input = document.createElement('input')
+		input.setAttribute('type', 'text');
+		input.setAttribute('id', number);
+		tdInput.appendChild(input);
+		tr.appendChild(tdLabel);
+		tr.appendChild(tdInput);
+
+		table.appendChild(tr);
+	}
 </script>
 </html>
