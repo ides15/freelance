@@ -243,15 +243,15 @@
 				document.loan_form.vaca.value="0";
 
 				// Removes the key that was stored when the expenses were initially calculated.
-				sessionStorage.removeItem('total_op_exp')
+				sessionStorage.removeItem('total_op_exp');
 
 				calculate(parseFLoat(gsi), parseFloat(vaca));
 			}
 
 			function calculate(gsi, vaca) {
 
-				var gsi = document.loan_form.gsi.value;
-				var vaca = document.loan_form.vaca.value;
+				gsi = document.loan_form.gsi.value;
+				vaca = document.loan_form.vaca.value;
 
 				gsi = gsi.split(",").join("");
 				vaca = vaca.split(",").join("");
