@@ -1,36 +1,25 @@
-<!-- 
-I need you to compute the Internal Rate of Return (IRR).  The IRR is the rate at which the Net Present Value (NPV) is 0. 
-http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal-rate-return-irr-excel.asp
--->
 <html>
 
 <head>
-	<!-- <link href='style.css' rel='stylesheet'> -->
-	<style>
-	table {
-		border-spacing: 0;
-	}
-
-	form {
-		margin: 10px;
-	}
-
-	</style>
+	<link href='style.css' rel='stylesheet'>
 </head>
 
 <body>
 	<div class="container">
 		<h1><strong>NPV</strong></h1>
+
 		<div class="box" id="one">
 			<!-- <video width="320" height="240" controls style="width:100%;height:100%;">
 				<source src="ice_video_20170520-141641.mp4" type="video/mp4">
 				<source src="movie.ogg" type="video/ogg">
 			</video> -->
 		</div>
+
 		<div class="box" id="two">
 			<strong><h2>NPV</h2></strong>
 			</br>
 		</div>
+
 		<div class="box" id="three">
 			<form name="loan_form">
 				<table id="irr-table">
@@ -54,7 +43,7 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 							<button type="button" id="removeYear" style="width: 100%">Remove Cash Flow Year</button>
 						</td>
 					</tr>
-					<tr id="1">
+					<tr id="row1">
 						<td>
 							Cash Flow Year 1:
 						</td>
@@ -68,7 +57,7 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 
 			<p id="sum-pv" style="margin-left: 10px">Summed PV: <span id="pv-val"></span></p>
 			<p id="npv" style="margin-left: 10px">NPV: <span id="npv-val"></span></p>
-			<h3 id="irr" style="margin-left: 10px">IRR: </h3>
+			<h3 id="irr" style="margin-left: 10px">IRR: <span id="irr-val"></span></h3>
 		</div>
 	</div>
 </body>
@@ -96,7 +85,7 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 			this.setAttribute('style', 'display: none');
 		}
 
-		var row = document.getElementById(numberOfYears + 1);
+		var row = document.getElementById('row' + (numberOfYears + 1));
 		row.parentNode.removeChild(row);
 	})
 
@@ -126,21 +115,64 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 		var discountRate = document.getElementById('discount-rate').value;
 		var purchasePrice = document.getElementById('purchase-price').value;
 		var irr = document.getElementById('irr');
+		var irrValue = document.getElementById('irr-val');
 		var pvValue = document.getElementById('pv-val');
 		var npvValue = document.getElementById('npv-val');
 		var summedPV = 0;
+		var yearValues = [];
 
 		for(var i = 1; i <= numberOfYears; i++) {
 			var pv = parseInt(document.getElementById('input' + i).value) / Math.pow((1 + (discountRate / 100)), i);
 			summedPV += pv;
+
+			yearValues[i - 1] = parseInt(document.getElementById('input' + i).value);
 		}
 
 		if(summedPV > 0) {
 			pvValue.innerHTML = '<strong>' + summedPV.toFixed(0) + '</strong>';
 			npvValue.innerHTML = '<strong>' + (summedPV - (0 - purchasePrice)).toFixed(0) + '</strong>';
 		}
+		
+		irrValue.innerHTML = calcIRR(parseInt(purchasePrice), ...yearValues).toFixed(0) + '%';
 	})
 
+	// Taken from Finance.js (https://github.com/trentrichardson/FinanceJs)
+	function calcIRR(cfs) {
+		var args = arguments;
+		var numberOfTries = 1;
+		// Cash flow values must contain at least one positive value and one negative value
+		var positive, negative;
+		Array.prototype.slice.call(args).forEach(function (value) {
+			if (value > 0) positive = true;
+			if (value < 0) negative = true;
+		})
+		if (!positive || !negative) throw new Error('IRR requires at least one positive value and one negative value');
+		function npv(rate) {
+			numberOfTries++;
+			if (numberOfTries > 1000000) {
+				throw new Error('IRR can\'t find a result');
+			}
+			var rrate = (1 + rate/100);
+			var npv = args[0];
+			for (var i = 1; i < args.length; i++) {
+				npv += (args[i] / Math.pow(rrate, i));
+			}
+			return npv;
+		}
+		return Math.round(seekZero(npv) * 100) / 100;
+	}
+
+	// Taken from Finance.js (https://github.com/trentrichardson/FinanceJs)
+	function seekZero(fn) {
+		var x = 1;
+		while (fn(x) > 0) {
+			x += 1;
+		}
+		while (fn(x) < 0) {
+			x -= 0.01
+		}
+		return x + 0.01;
+	}
 </script>
 
 </html>
