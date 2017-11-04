@@ -6,6 +6,16 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 
 <head>
 	<!-- <link href='style.css' rel='stylesheet'> -->
+	<style>
+	table {
+		border-spacing: 0;
+	}
+
+	form {
+		margin: 10px;
+	}
+
+	</style>
 </head>
 
 <body>
@@ -23,60 +33,66 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 		</div>
 		<div class="box" id="three">
 			<form name="loan_form">
-				<br>
-				<table id="irr-table" style="margin: 10px">						<tr>
-							<td><strong>Discount Rate</strong></td>
-							<td>
-								<input type="text" name="dr" size="10" value="10" style="text-align:right" />
-							</td>
-						</tr>
-						<tr>
-							<td><strong>Purchase Price:</strong></td>
-							<td>
-								<input type="text" name="purc" size="10" value="-100,000" style="text-align:right" />
-							</td>
-						</tr>
-						<tr>
-							<td style="padding-top: 20px">
-								<button id="addYear">Add Cash Flow Year</button>
-							</td>
-							<td style="padding-top: 20px">
-								<button id="removeYear">Remove Cash Flow Year</button>
-							</td>
-						</tr>
+				<table id="irr-table">
+					<tr>
+						<td><strong>Discount Rate</strong></td>
+						<td>
+							<input type="number" id="discount-rate" name="dr" size="10" value="10" min="0" style="text-align:right" />
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Purchase Price:</strong></td>
+						<td>
+							<input type="number" id="purchase-price" name="purc" size="10" value="-100000" max="0" style="text-align:right" />
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-top: 20px">
+							<button type="button" id="addYear">Add Cash Flow Year</button>
+						</td>
+						<td style="padding-top: 20px">
+							<button type="button" id="removeYear" style="width: 100%">Remove Cash Flow Year</button>
+						</td>
+					</tr>
 					<tr id="1">
 						<td>
-							Cash Flow Year 1: 
+							Cash Flow Year 1:
 						</td>
 						<td>
-							<input type="text">
+							<input type="number" id="input1">
 						</td>
 					</tr>
 				</table>
+				<button id="submit">Submit</button>
 			</form>
+
+			<p id="sum-pv" style="margin-left: 10px">Summed PV: <span id="pv-val"></span></p>
+			<p id="npv" style="margin-left: 10px">NPV: <span id="npv-val"></span></p>
+			<h3 id="irr" style="margin-left: 10px">IRR: </h3>
 		</div>
 	</div>
 </body>
-
 <script>
 	var numberOfYears = 1;
 
+	// Add Cash Flow Year Button Listener
 	document.getElementById('addYear').addEventListener('click', function(e) {
 		e.preventDefault()
 		numberOfYears++;
 
-		if(numberOfYears >= 1) {
+		if (numberOfYears >= 1) {
 			document.getElementById('removeYear').setAttribute('style', 'display: unset');
 		}
 
 		addRow(numberOfYears);
 	})
 
+	// Remove Cash Flow Year Button Listener
 	document.getElementById('removeYear').addEventListener('click', function(e) {
 		e.preventDefault()
 		numberOfYears--;
 
-		if(numberOfYears === 0) {
+		if (numberOfYears === 0) {
 			this.setAttribute('style', 'display: none');
 		}
 
@@ -84,21 +100,47 @@ http://www.investopedia.com/ask/answers/022615/what-formula-calculating-internal
 		row.parentNode.removeChild(row);
 	})
 
+	// Function for adding rows, used by Add Cash Flow Button Listener
 	function addRow(number) {
 		var table = document.getElementById('irr-table');
 		var tr = document.createElement('tr');
-		tr.setAttribute('id', number);
+		tr.setAttribute('id', 'row' + number);
 		var tdLabel = document.createElement('td');
 		var label = document.createTextNode('Cash Flow Year ' + number + ': ');
 		tdLabel.appendChild(label);
 		var tdInput = document.createElement('td');
 		var input = document.createElement('input')
-		input.setAttribute('type', 'text');
+		input.setAttribute('type', 'number');
+		input.setAttribute('id', 'input' + number);
 		tdInput.appendChild(input);
 		tr.appendChild(tdLabel);
 		tr.appendChild(tdInput);
 
 		table.appendChild(tr);
 	}
+
+	// Submit Button Listener
+	document.getElementsByTagName('form')[0].addEventListener('submit', function(e) {
+		e.preventDefault();
+
+		var discountRate = document.getElementById('discount-rate').value;
+		var purchasePrice = document.getElementById('purchase-price').value;
+		var irr = document.getElementById('irr');
+		var pvValue = document.getElementById('pv-val');
+		var npvValue = document.getElementById('npv-val');
+		var summedPV = 0;
+
+		for(var i = 1; i <= numberOfYears; i++) {
+			var pv = parseInt(document.getElementById('input' + i).value) / Math.pow((1 + (discountRate / 100)), i);
+			summedPV += pv;
+		}
+
+		if(summedPV > 0) {
+			pvValue.innerHTML = '<strong>' + summedPV.toFixed(0) + '</strong>';
+			npvValue.innerHTML = '<strong>' + (summedPV - (0 - purchasePrice)).toFixed(0) + '</strong>';
+		}
+	})
+
 </script>
+
 </html>
