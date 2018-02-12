@@ -19,6 +19,10 @@
 			border: .5px solid;
 		}
 
+		.box input {
+			text-align: right;
+		}
+
 		#one {
 			overflow: auto;
 			height: 300px;
@@ -56,6 +60,12 @@
 				flex-direction: column;
 			}
 		}
+
+		table {
+			align: center;
+			font-family: sans-serif;
+			font-size: 13px;
+		}
 	</style>
 </head>
 
@@ -85,13 +95,13 @@
 					<tr>
 						<td><strong>Discount Rate</strong></td>
 						<td>
-							<input type="number" id="discount-rate" name="dr" size="10" value="10" min="0" style="text-align:right" />
+							<input type="text" id="discount-rate" name="dr" size="10" value="10" min="0"/>
 						</td>
 					</tr>
 					<tr>
 						<td><strong>Purchase Price:</strong></td>
 						<td>
-							<input type="number" id="purchase-price" name="purc" size="10" value="-100000" max="0" style="text-align:right" />
+							<input type="text" id="purchase-price" name="purc" size="10" value="-100000" max="0"/>
 						</td>
 					</tr>
 					<tr>
@@ -107,7 +117,7 @@
 							Cash Flow Year 1:
 						</td>
 						<td>
-							<input type="number" id="input1">
+							<input type="text" id="input1">
 						</td>
 					</tr>
 				</table>
@@ -117,14 +127,14 @@
 
 		<!-- RESULTS -->
 		<div class="box" id="four">
-			<p id="sum-pv" style="margin-left: 10px">Summed PV: <span id="pv-val"></span></p>
-			<p id="npv" style="margin-left: 10px">NPV: <span id="npv-val"></span></p>
-			<h3 id="irr" style="margin-left: 10px">IRR: <span id="irr-val"></span></h3>
+			<div id="info"></div>
 		</div>
 	</div>
 </body>
 <script>
 	var numberOfYears = 1;
+	var info = '';
+	var rows = 0;
 
 	// Add Cash Flow Year Button Listener
 	document.getElementById('addYear').addEventListener('click', function(e) {
@@ -161,18 +171,21 @@
 		tdLabel.appendChild(label);
 		var tdInput = document.createElement('td');
 		var input = document.createElement('input')
-		input.setAttribute('type', 'number');
+		input.setAttribute('type', 'text');
 		input.setAttribute('id', 'input' + number);
 		tdInput.appendChild(input);
 		tr.appendChild(tdLabel);
 		tr.appendChild(tdInput);
 
 		table.appendChild(tr);
+		rows++;
 	}
 
 	// Submit Button Listener
 	document.getElementsByTagName('form')[0].addEventListener('submit', function(e) {
 		e.preventDefault();
+		info = '';
+		document.getElementById('info').innerHTML = info;
 
 		var discountRate = document.getElementById('discount-rate').value;
 		var purchasePrice = document.getElementById('purchase-price').value;
@@ -190,12 +203,40 @@
 			yearValues[i - 1] = parseInt(document.getElementById('input' + i).value);
 		}
 
-		if(summedPV > 0) {
-			pvValue.innerHTML = '<strong>' + summedPV.toFixed(0) + '</strong>';
-			npvValue.innerHTML = '<strong>' + (summedPV - (0 - purchasePrice)).toFixed(0) + '</strong>';
+		info += '<table width="375">';
+
+		info += '<td></td>';
+		info += '<td><strong><center>Cash Flow</center></strong></td>';
+		info += '<td><strong><center>Present Value</center></strong></td>';
+
+		info += '<tr><td><strong>Discount Rate:</strong></td>';
+		info += '<td align="right">' + discountRate + '%</td>';
+
+		for (var i = 1; i <= rows + 1; i++) {
+			var cf = document.getElementById('input' + i).value
+
+			info += '<tr><td><strong>Cash Flow Year ' + i + ':</strong></td>';
+			info += '<td align="right">$' + cf + '</td>';
+			info += '<td align="right">$' + (cf / Math.pow((1 + (discountRate / 100)), i)).toFixed(0) + '</td>';
 		}
-		
-		irrValue.innerHTML = calcIRR(parseInt(purchasePrice), ...yearValues).toFixed(0) + '%';
+
+		info += '<tr><td><strong>TOTAL PRESENT VALUE:</strong></td>';
+		info += '<td align="right"></td>';
+		info += '<td align="right"><strong>$' + summedPV.toFixed(0) + '</strong></td>';
+
+		info += '<tr><td><strong>Purchase Price:</strong></td>';
+		info += '<td align="right"></td>';
+		info += '<td align="right"><strong>$' + purchasePrice + '</strong></td>';
+
+		info += '<tr><td><strong>NET PRESENT VALUE:</strong></td>';
+		info += '<td align="right"></td>';
+		info += '<td align="right"><strong>$' + (summedPV - (0 - purchasePrice)).toFixed(0) + '</strong></td>';
+
+		info += '<tr><td><strong>Internal Rate of Return:</strong></td>';
+		info += '<td align="right"></td>';
+		info += '<td align="right"><strong>' + calcIRR(parseInt(purchasePrice), ...yearValues).toFixed(2) + '%</strong></td>';
+
+		document.getElementById('info').innerHTML = info;
 	})
 
 	// Taken from Finance.js (https://github.com/trentrichardson/FinanceJs)
